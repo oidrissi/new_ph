@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oidrissi <oidrissi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/28 20:45:37 by oidrissi          #+#    #+#             */
+/*   Updated: 2021/10/28 20:45:37 by oidrissi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILOSOPHERS_H
 #define PHILOSOPHERS_H
 
-# include <stdbool.h>
 # include <stdio.h>		//	printf
 # include <stdlib.h>	//	malloc
 # include <string.h>	//	memset
@@ -35,14 +46,16 @@ typedef	struct s_philo
 {
 	int					id;
 	long long			last_time_ate;
-	pthread_t			eating;
+	pthread_mutex_t		eating;
 	pthread_t			thread_id;
+	pthread_t			death_thread;
 	int					l_fork;
     int					r_fork;
 	unsigned int		number_times_ate;
+	int					is_eating;
 	int					done;
 	char				*status;
-	t_game				*g;
+	struct s_game		*d_tab;
 	
 }	t_philo;
 
@@ -52,15 +65,20 @@ typedef	struct	s_game
     pthread_mutex_t	*forks;
 	int				nb_philo;
 	long long		start_time;
-	int				t_t_die;
-	int				t_t_sleep;
-	int				t_t_eat;
-	int				must_eat_nb;
-	int				death;
+	long long		t_t_die;
+	long long		t_t_sleep;
+	long long		t_t_eat;
+	long long		must_eat_nb;
+	long long		death;
 	t_philo         **ph;
 
 }	t_game;
 
-int main(int ac, char **av);
+int 		main(int ac, char **av);
+int			correct_input(char **tab, t_data *data);
+long long	get_current_time(void);
+void		print_status(t_game *d_tab, int id, char *s);
+void 		*routines(void *data);
+void    	*death_checker(void *data);
 
 #endif
