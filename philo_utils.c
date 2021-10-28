@@ -6,7 +6,7 @@
 /*   By: oidrissi <oidrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 21:10:51 by oidrissi          #+#    #+#             */
-/*   Updated: 2021/10/28 21:12:55 by oidrissi         ###   ########.fr       */
+/*   Updated: 2021/10/28 21:25:49 by oidrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	is_correct(char *str)
 	return (1);
 }
 
-int	correct_input(char **tab, t_data *data)
+int	correct_input(char **tab)
 {
 	int		i;
 
@@ -72,7 +72,10 @@ int	correct_input(char **tab, t_data *data)
 	while (tab[i])
 	{
 		if (is_correct(tab[i]) == 0)
-			ft_puterror("Error\n", &data);
+		{
+			write(2, "Error: Invalid Argument\n", 23);
+			return (0);
+		}
 		i++;
 	}
 	return (1);

@@ -75,10 +75,11 @@ typedef	struct	s_game
 }	t_game;
 
 int 		main(int ac, char **av);
-int			correct_input(char **tab, t_data *data);
+int			correct_input(char **tab);
 long long	get_current_time(void);
 void		print_status(t_game *d_tab, int id, char *s);
 void 		*routines(void *data);
 void    	*death_checker(void *data);
+long long	ft_atoi(const char *str);
 
 #endif

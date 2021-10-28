@@ -45,9 +45,9 @@ pthread_mutex_t *init_forks(t_game *d_tab)
 	int				i;
 
 	i = 0;
-	if (d_tab->nb_philo > INTOFLOW || d_tab->t_t_die > LOFLOW
-		|| d_tab->t_t_eat > LOFLOW || d_tab->t_t_sleep > LOFLOW
-		|| d_tab->must_eat_nb > LOFLOW)
+	if (d_tab->nb_philo > INTOFLOW || d_tab->t_t_die > INTOFLOW
+		|| d_tab->t_t_eat > INTOFLOW || d_tab->t_t_sleep > INTOFLOW
+		|| d_tab->must_eat_nb > INTOFLOW)
 	{
 		write(2, "Error: Invalid Argument\n", 23);
 		return (NULL);
@@ -69,7 +69,7 @@ t_game	*init_table(int ac, char **av)
     t_game   *d_tab;
 
     d_tab = (t_game *) malloc(sizeof(t_game) * 1);
-	if ((ac == 5 || ac == 6) || is_correct(*av))
+	if ((ac == 5 || ac == 6) && correct_input(av))
 	{
 		d_tab->nb_philo = ft_atoi(av[1]);
 		d_tab->t_t_die = ft_atoi(av[2]);
