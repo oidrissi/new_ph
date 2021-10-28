@@ -6,7 +6,7 @@
 /*   By: oidrissi <oidrissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 21:16:43 by oidrissi          #+#    #+#             */
-/*   Updated: 2021/10/28 21:16:50 by oidrissi         ###   ########.fr       */
+/*   Updated: 2021/10/28 21:29:47 by oidrissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void    *death_checker(void *data)
 			ph->d_tab->death = 0;
 			pthread_mutex_unlock(&ph->eating);
 		}
-		if (ph->d_tab->ph[ph->d_tab->nb_philo - 1]->number_times_ate
+		if (ph->d_tab->ph[ph->d_tab->n_p - 1]->number_times_ate
 			== ph->d_tab->must_eat_nb)
 			ph->d_tab->death = 0;
 		usleep(100);

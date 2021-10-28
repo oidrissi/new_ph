@@ -12,16 +12,16 @@
 
 #include "philo.h"
 
-t_philo **init_philo(t_game *d_tab)
+t_philo	**init_philo(t_game *d_tab)
 {
-    t_philo	**ph;
+	t_philo	**ph;
 	int		i;
 
 	i = 0;
-	ph = (t_philo **)malloc(sizeof(t_philo *) * d_tab->nb_philo + 1);
+	ph = (t_philo **)malloc(sizeof(t_philo *) * d_tab->n_p + 1);
 	if (ph == NULL)
 		return (NULL);
-	while (i < d_tab->nb_philo)
+	while (i < d_tab->n_p)
 	{
 		ph[i] = (t_philo *)malloc(sizeof(t_philo) * 1);
 		if (ph[i] == NULL)
@@ -33,29 +33,29 @@ t_philo **init_philo(t_game *d_tab)
 		ph[i]->is_eating = 0;
 		ph[i]->number_times_ate = 0;
 		ph[i]->l_fork = i;
-		ph[i]->r_fork = (i + 1) % ph[i]->d_tab->nb_philo;
+		ph[i]->r_fork = (i + 1) % ph[i]->d_tab->n_p;
 		i++;
 	}
 	return (ph);
 }
 
-pthread_mutex_t *init_forks(t_game *d_tab)
+pthread_mutex_t	*init_forks(t_game *d_tab)
 {
-    pthread_mutex_t	*forks;
+	pthread_mutex_t	*forks;
 	int				i;
 
 	i = 0;
-	if (d_tab->nb_philo > INTOFLOW || d_tab->t_t_die > INTOFLOW
+	if (d_tab->n_p > INTOFLOW || d_tab->t_t_die > INTOFLOW
 		|| d_tab->t_t_eat > INTOFLOW || d_tab->t_t_sleep > INTOFLOW
 		|| d_tab->must_eat_nb > INTOFLOW)
 	{
 		write(2, "Error: Invalid Argument\n", 23);
 		return (NULL);
 	}
-	forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * d_tab->nb_philo);
+	forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * d_tab->n_p);
 	if (forks == NULL)
 		return (NULL);
-	while (i < d_tab->nb_philo)
+	while (i < d_tab->n_p)
 	{
 		if (pthread_mutex_init(&forks[i], 0) != 0)
 			return (NULL);
@@ -71,7 +71,7 @@ t_game	*init_table(int ac, char **av)
     d_tab = (t_game *) malloc(sizeof(t_game) * 1);
 	if ((ac == 5 || ac == 6) && correct_input(av))
 	{
-		d_tab->nb_philo = ft_atoi(av[1]);
+		d_tab->n_p = ft_atoi(av[1]);
 		d_tab->t_t_die = ft_atoi(av[2]);
 		d_tab->t_t_eat = ft_atoi(av[3]);
 		d_tab->t_t_sleep = ft_atoi(av[4]);
@@ -79,14 +79,14 @@ t_game	*init_table(int ac, char **av)
 		if (ac == 6)
 			d_tab->must_eat_nb = ft_atoi(av[5]);
 		d_tab->death = 1;
-		if (d_tab->nb_philo <= 0 || d_tab->t_t_die <= 0 || d_tab->t_t_eat <= 0
+		if (d_tab->n_p <= 0 || d_tab->t_t_die <= 0 || d_tab->t_t_eat <= 0
 			|| d_tab->t_t_sleep <= 0)
 			return (NULL);
         d_tab->forks = init_forks(d_tab);
         if (d_tab->forks == NULL)
 		    return (NULL);
         d_tab->ph = init_philo(d_tab);
-        if (d_tab->ph == NULL || d_tab->nb_philo == 0)
+        if (d_tab->ph == NULL || d_tab->n_p == 0)
 		    return (NULL);
         if (pthread_mutex_init(&d_tab->out_msg, 0) != 0)
 		    return (NULL);
@@ -101,7 +101,7 @@ int start_threads(t_game *d_tab)
 
     i = 0;
     d_tab->start_time = get_current_time();
-    while (i < d_tab->nb_philo)
+    while (i < d_tab->n_p)
     {
         d_tab->ph[i]->last_time_ate = get_current_time();
 		if (pthread_create(&d_tab->ph[i]->thread_id, NULL,
@@ -111,7 +111,7 @@ int start_threads(t_game *d_tab)
 		usleep(100);
     }
     i = 0;
-    while (i < d_tab->nb_philo)
+    while (i < d_tab->n_p)
     {
 		if (pthread_create(&d_tab->ph[i]->death_thread, NULL,
 			&death_checker, (void *)d_tab->ph[i]) != 0)

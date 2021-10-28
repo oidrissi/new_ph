@@ -63,7 +63,7 @@ typedef	struct	s_game
 {
 	pthread_mutex_t	out_msg;
     pthread_mutex_t	*forks;
-	int				nb_philo;
+	int				n_p;
 	long long		start_time;
 	long long		t_t_die;
 	long long		t_t_sleep;
