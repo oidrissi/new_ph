@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oidrissi <oidrissi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 21:10:51 by oidrissi          #+#    #+#             */
-/*   Updated: 2021/10/28 21:25:49 by oidrissi         ###   ########.fr       */
+/*   Updated: 2021/10/28 23:52:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,8 @@ int	is_correct(char *str)
 	int		i;
 
 	i = 0;
-	if ((str[0] == '-' || str[0] == '+') && str[1] == '\0')
-		return (0);
 	if (str[0] == '-' || str[0] == '+')
-		str++;
+		return (0);
 	while (str[i])
 	{
 		if (ft_isdigit(str[i]) == 0)

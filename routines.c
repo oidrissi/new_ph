@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routines.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oidrissi <oidrissi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 21:13:42 by oidrissi          #+#    #+#             */
-/*   Updated: 2021/10/28 21:14:45 by oidrissi         ###   ########.fr       */
+/*   Updated: 2021/10/28 23:44:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	print_status(t_game *d_tab, int id, char *s)
 {
 	pthread_mutex_lock(&d_tab->out_msg);
-	printf("%lld %d %s", get_current_time() - d_tab->start_time, id + 1, s);
+	printf("%lld Philo Number %d %s", get_current_time() - d_tab->start_time, id + 1, s);
 	if (s[0] != 'd')
 		pthread_mutex_unlock(&d_tab->out_msg);
 }
@@ -49,13 +49,11 @@ void sleep_ph(t_philo *ph)
     usleep(ph->d_tab->t_t_sleep * 1000 - 16000);
     while (get_current_time() - time < ph->d_tab->t_t_sleep)
         continue ;
-	return ;
 }
 
 void think_ph(t_philo *ph)
 {
     print_status(ph->d_tab, ph->id, "is thinking\n");
-	return ;
 }
 
 void *routines(void *data)

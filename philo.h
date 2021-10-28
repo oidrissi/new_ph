@@ -15,7 +15,6 @@
 
 # include <stdio.h>		//	printf
 # include <stdlib.h>	//	malloc
-# include <string.h>	//	memset
 # include <unistd.h>	//	usleep
 # include <sys/time.h>	//	gettimeofday(struct timeval *restrict tv,
                     	//	struct timezone *restrict tz);
@@ -39,6 +38,8 @@
 						//	5 - int pthread_mutex_lock(pthread_mutex_t *mutex);
 						//	6 - int pthread_mutex_unlock(pthread_mutex_t *mutex);
 
+//number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]
+
 #define LOFLOW 9223372036854775807
 #define INTOFLOW 2147483647
 
@@ -54,7 +55,6 @@ typedef	struct s_philo
 	unsigned int		number_times_ate;
 	int					is_eating;
 	int					done;
-	char				*status;
 	struct s_game		*d_tab;
 	
 }	t_philo;

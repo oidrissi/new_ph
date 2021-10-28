@@ -76,11 +76,11 @@ t_game	*init_table(int ac, char **av)
 		d_tab->t_t_eat = ft_atoi(av[3]);
 		d_tab->t_t_sleep = ft_atoi(av[4]);
 		d_tab->must_eat_nb = -1;
-		if (ac == 6)
+		if (ac == 6 && correct_input(av))
 			d_tab->must_eat_nb = ft_atoi(av[5]);
 		d_tab->death = 1;
 		if (d_tab->n_p <= 0 || d_tab->t_t_die <= 0 || d_tab->t_t_eat <= 0
-			|| d_tab->t_t_sleep <= 0)
+			|| d_tab->t_t_sleep <= 0 || d_tab->must_eat_nb == 0)
 			return (NULL);
         d_tab->forks = init_forks(d_tab);
         if (d_tab->forks == NULL)
