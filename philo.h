@@ -28,6 +28,9 @@
 						//	5 - int pthread_mutex_lock(pthread_mutex_t *mutex);
 						//	6 - int pthread_mutex_unlock(pthread_mutex_t *mutex);
 
+#define LOFLOW 9223372036854775807
+#define INTOFLOW 2147483647
+
 typedef	struct s_philo
 {
 	int					id;

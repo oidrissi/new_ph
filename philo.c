@@ -1,5 +1,32 @@
 #include <philo.h>
 
+long long	ft_atoi(const char *str)
+{
+	unsigned long long	num;
+	int					sign;
+	int					i;
+
+	i = 0;
+	num = 0;
+	sign = 1;
+	while (str[i] == '\n'
+		|| str[i] == '\t'
+		|| str[i] == '\r'
+		|| str[i] == '\v'
+		|| str[i] == '\f'
+		|| str[i] == ' ')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i] && str[i] >= '0' && str[i] <= '9')
+		num = num * 10 + str[i++] - '0';
+	return (num * sign);
+}
+
 t_philo **init_philo(t_game *d_tab)
 {
     t_philo	**ph;
@@ -33,9 +60,9 @@ pthread_mutex_t *init_forks(t_game *d_tab)
 	int				i;
 
 	i = 0;
-	if (d_tab->nb_philo > 2147483647 || d_tab->ttd > 9223372036854775807
-		|| d_tab->tte == 9223372036854775807 || d_tab->tts == 9223372036854775807
-		|| d_tab->ntpme == 9223372036854775807)
+	if (d_tab->nb_philo > INTOFLOW || d_tab->t_t_die > LOFLOW
+		|| d_tab->t_t_eat > LOFLOW || d_tab->t_t_sleep > LOFLOW
+		|| d_tab->must_eat_nb > LOFLOW)
 	{
 		write(2, "Error: Invalid Argument\n", 23);
 		return (NULL);
@@ -65,6 +92,7 @@ t_tab	init_table(char **argv, int ac)
 		d_tab->t_t_sleep = ft_atoi(argv[4]);
 		if (ac == 6)
 			d_tab->must_eat_nb = ft_atoi(argv[5]);
+		d_tab->death = 1;
 		if (d_tab->nb_philo <= 0 || d_tab->t_t_die <= 0 || d_tab->t_t_eat <= 0
 			|| d_tab->t_t_sleep <= 0)
 			return (NULL);
@@ -160,7 +188,7 @@ void    death_checker(void *data)
     while (ph->d_tab->death)
     {
         if (!ph->is_eating
-			&& get_current_time() - ph->lta >= ph->d_tab->t_t_die)
+			&& get_current_time() - ph->last_time_ate >= ph->d_tab->t_t_die)
 		{
 			pthread_mutex_lock(&ph->eating);
 			print_status(ph->d_tab, ph->id, "died\n");
@@ -183,11 +211,10 @@ int start_threads(t_game *d_tab)
     d_tab->start_time = get_current_time();
     while (i++ < d_tab->nb_philo)
     {
-        d_tab->ph[i]->lta = get_current_time();
+        d_tab->ph[i]->last_time_ate = get_current_time();
 		if (pthread_create(&d_tab->ph[i]->thread_id, NULL,
 			&routines, (void *)d_tab->ph[i]) != 0)
 			return (ERROR);
-		i++;
 		usleep(100);
     }
     i = -1;
@@ -196,7 +223,6 @@ int start_threads(t_game *d_tab)
 		if (pthread_create(&d_tab->ph[i]->thread_id, NULL,
 			&death_checker, (void *)d_tab->ph[i]) != 0)
 			return (ERROR);
-		i++;
 		usleep(100);
     }
     while (d_tab->death)
@@ -207,9 +233,7 @@ int start_threads(t_game *d_tab)
 int main(int ac, char **av)
 {
     t_game   *d_tab;
-    int i;
 
-    i = 0;
     d_tab = init_table(ac, av);
     if (d_tab == NULL)
     {
